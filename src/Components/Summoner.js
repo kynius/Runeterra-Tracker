@@ -1,7 +1,8 @@
-import React, {Component, useState} from "react";
+import React, {Component} from "react";
 import axios from "axios";
 import {Col, Preloader, Row} from "react-materialize";
 import Match from "./Match";
+import Ranks from "./Ranks";
 export default class Summoner extends Component{
     constructor(props) {
         super(props);
@@ -38,7 +39,7 @@ export default class Summoner extends Component{
          <>
           <Row>
              <Col l={4} m={6} s={6} className={''}>
-                 <img height={'170px'} width={'170px'} style={{borderRadius:'15px'}} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/profileicon/${summoner.profileIconId}.png`}/>
+                 <img alt={'Summoner Icon'} height={'170px'} width={'170px'} style={{borderRadius:'15px'}} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/profileicon/${summoner.profileIconId}.png`}/>
                  <div className={'levelborder'}>{summoner.summonerLevel}</div>
                  <div style={{fontSize:'10px'}}>Last update: {revisionDate.toLocaleString()}</div>
              </Col> 
@@ -49,7 +50,7 @@ export default class Summoner extends Component{
              <Row>
                  <Col l={4} m={4} s={12}>
                      <Row>
-                        
+                        <Ranks summonerId={summoner.id}/>
                      </Row>
                  </Col> 
                  <Col l={8} m={12} s={12}>

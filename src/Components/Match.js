@@ -56,7 +56,7 @@ export default class Match extends Component {
     async componentDidMount() {
         const response = await axios.get(this.state.url);
         const json = await response.data;
-        const responseRunes = await axios.get('http://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/runesReforged.json');
+        const responseRunes = await axios.get('https://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/runesReforged.json');
         const jsonRunes = await responseRunes.data;
         this.setState({ queues: json, runes: jsonRunes});
         M.AutoInit();

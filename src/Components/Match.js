@@ -120,7 +120,7 @@ export default class Match extends Component {
         return (
             <>
                 <li>
-                <CardPanel className={color + ' collapsible-header'} style={{borderRadius: '15px'}} >
+                <CardPanel className={color + ' collapsible-header'} style={{borderRadius: '15px', border:'none'}} >
                     <div className={'white-text'}>
                         <Row>
                             <Col l={2} s={6} style={{fontSize: '15px'}}>
@@ -217,7 +217,7 @@ export default class Match extends Component {
                                     {match.info.participants.filter((s) => s.teamId === summonerStats.teamId).map((p) => (
 
                                         <tr>
-                                            <td><img alt={p.championName} className={'responsive-img championImageInTable'} style={{maxHeight: '40px'}} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/></td>
+                                            <td style={{paddingBottom:0}}><img alt={p.championName} className={'responsive-img championImageInTable'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/></td>
                                             <td><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
                                             <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
                                             <td>{p.goldEarned.toLocaleString()} G</td>
@@ -247,7 +247,7 @@ export default class Match extends Component {
                                 {match.info.participants.filter((s) => s.teamId !== summonerStats.teamId).map((p) => (
                                         
                                         <tr>
-                                            <td> <img alt={p.championName} className={'responsive-img championImageInTable'} style={{maxHeight: '40px'}} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/></td>
+                                            <td> <img alt={p.championName} className={'responsive-img championImageInTable'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/></td>
                                             <td><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
                                             <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
                                             <td>  {p.goldEarned.toLocaleString()} G</td>

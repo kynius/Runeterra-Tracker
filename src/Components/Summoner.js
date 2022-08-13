@@ -55,7 +55,7 @@ export default class Summoner extends Component{
                  </Col> 
                  <Col l={8} m={12} s={12}>
                      <Row>
-                         <ul class="collapsible" style={{overflow: "hidden", WebkitBoxShadow: 'none', boxShadow: 'none'}}>
+                         <ul class="collapsible" style={{overflow: "hidden", WebkitBoxShadow: 'none', boxShadow: 'none', border:'none'}}>
                          {matches.map((match) => (
                              <Match key={match.metadata.matchId} match={match} summoner={summoner}/>
                          ))}

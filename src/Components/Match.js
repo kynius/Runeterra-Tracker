@@ -97,6 +97,9 @@ export default class Match extends Component {
         let dateOfGame = new Date(match.info.gameStartTimestamp)
         let gameResult = 'Zwycięstwo';
         let kda;
+        let queueType;
+        {queue && (queueType = queue.description.replace('games', '').replace('5v5', '').toLocaleString())}
+        
         if(summonerTeam.win === false)
         {
          color = 'lose';   
@@ -121,11 +124,9 @@ export default class Match extends Component {
                     <div className={'white-text'}>
                         <Row>
                             <Col l={2} s={6} style={{fontSize: '15px'}}>
-                                {queue && (
-                                    <div>
-                                        {queue.description.replace('games', '').replace('5v5', '').toLocaleString()}
-                                    </div>
-                                )}
+                                <div>
+                                    {queueType}
+                                </div>
                                 <div>
                                     {gameDuration.minutes}  {gameDuration.seconds}
                                 </div>

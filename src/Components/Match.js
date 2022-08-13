@@ -123,7 +123,7 @@ export default class Match extends Component {
                             <Col l={2} s={6} style={{fontSize: '15px'}}>
                                 {queue && (
                                     <div>
-                                        {queue.description.replace('games', '').replace('5v5', '')}
+                                        {queue.description.replace('games', '').replace('5v5', '').toLocaleString()}
                                     </div>
                                 )}
                                 <div>

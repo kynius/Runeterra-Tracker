@@ -10,18 +10,20 @@ import SummonerPage from "./SummonerPage";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <div style={{minHeight: '100vh'}} className={'theme-switcher'}>
+      
       <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css"/>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
       <script src={""}></script>
       <BrowserRouter>
+          <div style={{minHeight: '100vh'}} className={'theme-switcher'}>
           <Routes>
               <Route path={''} element={<App/>}/>
               <Route path="/:server/:summonerName" element={<SummonerPage/>}/>
           </Routes>
+          </div>
       </BrowserRouter>
-      </div>
+      
   </React.StrictMode>
 );
 

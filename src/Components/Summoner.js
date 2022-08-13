@@ -48,16 +48,18 @@ export default class Summoner extends Component{
               </Col>
           </Row>
              <Row>
-                 <Col l={4} m={4} s={12}>
+                 <Col l={4} m={12} s={12}>
                      <Row>
                         <Ranks summonerId={summoner.id}/>
                      </Row>
                  </Col> 
                  <Col l={8} m={12} s={12}>
                      <Row>
+                         <ul class="collapsible" style={{overflow: "hidden", WebkitBoxShadow: 'none', boxShadow: 'none'}}>
                          {matches.map((match) => (
                              <Match key={match.metadata.matchId} match={match} summoner={summoner}/>
                          ))}
+                         </ul>
                      </Row>
                  </Col>
              </Row>

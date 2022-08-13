@@ -3,6 +3,7 @@ import {CardPanel, Col, Row} from "react-materialize";
 import axios from "axios";
 import convert from "convert-seconds"
 import M from 'materialize-css'
+import { Link } from "react-router-dom";
 export default class Match extends Component {
     constructor(props) {
         super(props);
@@ -32,13 +33,13 @@ export default class Match extends Component {
         if(perk === undefined)
         {
             return (
-                    <img width={'50px'} src={'https://ddragon.canisback.com/img/perk-images/Styles/Inspiration/FirstStrike/FirstStrike.png'}/>
+                    <img alt={'First Strike'} width={'50px'} src={'https://ddragon.canisback.com/img/perk-images/Styles/Inspiration/FirstStrike/FirstStrike.png'}/>
             )
         }
        return(
            <>
                {perk && (
-                   <img width={'50px'} src={`https://ddragon.canisback.com/img/${perk.icon}`}/>
+                   <img alt={perk.icon} width={'50px'} src={`https://ddragon.canisback.com/img/${perk.icon}`}/>
                )}
            </>
        )}
@@ -47,7 +48,7 @@ export default class Match extends Component {
             return(
                 <>
                     {rune && (
-                        <img width={'25px'} src={`https://ddragon.canisback.com/img/${rune.icon}`}/>
+                        <img alt={rune.icon} width={'25px'} src={`https://ddragon.canisback.com/img/${rune.icon}`}/>
                     )}
                 </>
             )
@@ -61,7 +62,31 @@ export default class Match extends Component {
         M.AutoInit();
     }
     render() {
+        function csPerMinute(summoner)
+        {
+            let csPerM = (summoner.totalMinionsKilled + summoner.neutralMinionsKilled) / gameDuration.minutes;
+            return <>{csPerM.toFixed(1)}</>
+        }
+        function getKda(summoner)
+        {
+            if(summoner.deaths !== 0)
+            {
+                kda = (summoner.kills + summoner.assists) / summoner.deaths;
+            }else {
+                kda = summoner.kills + summoner.assists;
+            }
+            if(kda <= 1)
+                kdaColor = 'red'
+            if(kda > 1 && kda < 5){
+                kdaColor = 'green'
+            }
+            if(kda >= 5){
+                kdaColor = 'gold'
+            }
+            return <span style={{color: kdaColor}}>{kda.toFixed(1)}</span>
+        }
         let kdaColor;
+        let opponentGameResult;
         let match = this.props.match;
         let summoner = this.props.summoner;
         const queue = this.state.queues.find((m) => m.queueId === match.info.queueId);
@@ -72,29 +97,27 @@ export default class Match extends Component {
         let dateOfGame = new Date(match.info.gameStartTimestamp)
         let gameResult = 'Zwycięstwo';
         let kda;
-        let csPerMinute = (summonerStats.totalMinionsKilled + summonerStats.neutralMinionsKilled) / gameDuration.minutes;
-        if(summonerStats.deaths !== 0)
-        {
-            kda = (summonerStats.kills + summonerStats.assists) / summonerStats.deaths;
-        }else {
-            kda = summonerStats.kills + summonerStats.assists;
-        }
         if(summonerTeam.win === false)
         {
          color = 'lose';   
          gameResult = 'Porażka'
         }
-        if(kda <= 1)
-            kdaColor = 'red'
-        if(kda > 1 && kda < 5){
-                kdaColor = 'green'
+        let opponentColor;
+        if(color === 'win')
+        {
+            opponentColor = 'lose'
+            opponentGameResult = "Porażka"
         }
-        if(kda >= 5){
-                kdaColor = 'gold'
+        else if(color === 'lose')
+        {
+            opponentColor = 'win'
+            opponentGameResult = 'Zwycięstwo'
         }
+            
         return (
             <>
-                <CardPanel style={{borderRadius: '15px'}} className={color}>
+                <li>
+                <CardPanel className={color + ' collapsible-header'} style={{borderRadius: '15px'}} >
                     <div className={'white-text'}>
                         <Row>
                             <Col l={2} s={6} style={{fontSize: '15px'}}>
@@ -116,7 +139,7 @@ export default class Match extends Component {
                                     {summonerStats.kills} / {summonerStats.deaths} / {summonerStats.assists}
                                 </div>
                                 <div>
-                                   <div style={{color: kdaColor} }> KDA: {kda.toFixed(1)} </div>
+                                   <div> KDA: {getKda(summonerStats)} </div>
                                 </div>
                             </Col>
                             <Col l={2} s={6}>
@@ -129,7 +152,7 @@ export default class Match extends Component {
                                     {summonerStats.totalMinionsKilled + summonerStats.neutralMinionsKilled} CS
                                 </div>
                                 <div>
-                                    {csPerMinute.toFixed(1)} CS/min
+                                    {csPerMinute(summonerStats)} CS/min
                                 </div>
                             </Col>
                             <Col l={2} s={12}>
@@ -145,36 +168,99 @@ export default class Match extends Component {
                             <Col l={3} s={6}>
                                 <Row className={'center'}>
                                 {match.info.participants.filter((s) => s.teamId === summonerStats.teamId).map((p) => (
-                                    <>
-                                        <Col l={4} m={4} s={4} className={'right-align'}>
-                                            <img alt={p.championName} width={'16px'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/>
+                                    <Col l={12} m={12} s={12}>
+                                        <Col l={3} m={4} s={4} className={'right-align'}>
+                                            <img alt={p.championName} className={'responsive-img'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/>
                                         </Col>
-                                        <Col l={8} m={8} s={8} className={'left-align'}>
+                                        <Col l={9} m={8} s={8} className={'left-align'}>
                                             <div title={p.summonerName} className={'truncate'}>{p.summonerName}</div>
                                         </Col>
-                                    </>
+                                    </Col>
                                 ))}
                                 </Row>
                             </Col>
                             <Col l={3} s={6}>
                                 <Row className={'center'}>
                                 {match.info.participants.filter((s) => s.teamId !== summonerStats.teamId).map((p) => (
-                                    <>
-                                        <Col l={8} m={8} s={8} className={'right-align'}>
+                                    <Col l={12}>
+                                        <Col l={9} m={8} s={8} className={'right-align'}>
                                             <div title={p.summonerName} className={'truncate'}>{p.summonerName}</div>
                                         </Col>
-                                        <Col l={4} m={4} s={4} className={'left-align'}>
-                                            <img alt={p.championName} height={'16px'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/>
+                                        <Col l={3} m={4} s={4} className={'left-align'}>
+                                            <img alt={p.championName} className={'responsive-img'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/>
                                         </Col>
-                                    </>
+                                    </Col>
                                 ))}
                                     </Row>
                             </Col>
                         </Row>
                         </div>
-                </CardPanel> 
-                {/*<CardPanel style={{opacity:'0.6'}} className={'red'}>*/}
-                {/*</CardPanel>*/}
+                </CardPanel>
+                    <CardPanel style={{borderRadius: '15px', border: 'none'}} className={'blue-grey collapsible-body'}>
+                        <div className={'white-text'}>{gameResult}</div>
+                        <Row>
+                            <Col l={12} m={12} s={12} className={color + ' white-text'} style={{borderRadius: '15px'}}>
+                                <table className={'responsive-table centered'}>
+                                    <thead>
+                                    <tr>
+                                        <th>Champion</th>
+                                        <th>Summoner</th>
+                                        <th>KDA</th>
+                                        <th>Total Gold</th>
+                                        <th>Minion Score</th>
+                                        <th>Damage Given</th>
+                                        <th>Damage Taken</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {match.info.participants.filter((s) => s.teamId === summonerStats.teamId).map((p) => (
+
+                                        <tr>
+                                            <td><img alt={p.championName} className={'responsive-img championImageInTable'} style={{maxHeight: '40px'}} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/></td>
+                                            <td><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
+                                            <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
+                                            <td>{p.goldEarned.toLocaleString()} G</td>
+                                            <td>{p.totalMinionsKilled + p.neutralMinionsKilled} ({csPerMinute(p)})</td>
+                                            <td>{p.totalDamageDealtToChampions.toLocaleString()}</td>
+                                            <td>{p.totalDamageTaken.toLocaleString()}</td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </Col>
+                            <div className={'white-text'}>{opponentGameResult}</div>
+                            <Col l={12} m={12} s={12} className={opponentColor + ' white-text'} style={{borderRadius: '15px'}}>
+                                <table className={'responsive-table centered'}>
+                                    <thead>
+                                        <tr>
+                                            <th>Champion</th>
+                                            <th>Summoner</th>
+                                            <th>KDA</th>
+                                            <th>Total Gold</th>
+                                            <th>Minion Score</th>
+                                            <th>Damage Given</th>
+                                            <th>Damage Taken</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                {match.info.participants.filter((s) => s.teamId !== summonerStats.teamId).map((p) => (
+                                        
+                                        <tr>
+                                            <td> <img alt={p.championName} className={'responsive-img championImageInTable'} style={{maxHeight: '40px'}} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/></td>
+                                            <td><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
+                                            <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
+                                            <td>  {p.goldEarned.toLocaleString()} G</td>
+                                            <td>{p.totalMinionsKilled + p.neutralMinionsKilled} ({csPerMinute(p)})</td>
+                                            <td>{p.totalDamageDealtToChampions.toLocaleString()}</td>
+                                            <td>{p.totalDamageTaken.toLocaleString()}</td>
+                                        </tr>
+                                ))}
+                                    </tbody>
+                                </table>
+                            </Col>
+                        </Row>
+                    </CardPanel>
+                </li>
             </>
         )
     }

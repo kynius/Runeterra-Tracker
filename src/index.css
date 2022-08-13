@@ -26,3 +26,8 @@ body{
 .lose{
     background-color: #f4433690 !important;
 }
+@media only screen and (max-width: 700px) {
+    .championImageInTable{
+        max-height: 25px;
+    }
+}

@@ -39,7 +39,7 @@ export default class Summoner extends Component{
          <>
           <Row>
              <Col l={4} m={6} s={6} className={''}>
-                 <img alt={'Summoner Icon'} height={'170px'} width={'170px'} style={{borderRadius:'15px'}} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/profileicon/${summoner.profileIconId}.png`}/>
+                 <img alt={'Summoner Icon'} height={'170px'} width={'170px'} style={{borderRadius:'15px'}} src={`https://ddragon.leagueoflegends.com/cdn/12.14.1/img/profileicon/${summoner.profileIconId}.png`}/>
                  <div className={'levelborder'}>{summoner.summonerLevel}</div>
                  <div style={{fontSize:'10px'}}>Last update: {revisionDate.toLocaleString()}</div>
              </Col> 

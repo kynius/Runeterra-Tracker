@@ -272,7 +272,7 @@ export default class Match extends Component {
                                                 {this.checkNull(p.item5, '30px')}
                                             </td>
                                             <td className={'td-on-mobile'}><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
-                                            <td className={'td-on-mobile'}>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
+                                            <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
                                             <td>{p.goldEarned.toLocaleString()} G</td>
                                             <td>{p.totalMinionsKilled + p.neutralMinionsKilled} ({csPerMinute(p)})</td>
                                             <td className="tooltipped" data-position="top" data-tooltip={`Psychical: ${p.physicalDamageDealtToChampions.toLocaleString()} Magic: ${p.magicDamageDealtToChampions.toLocaleString()} True: ${p.trueDamageDealtToChampions.toLocaleString()} Taken: ${p.totalDamageTaken.toLocaleString()}`}>{p.totalDamageDealtToChampions.toLocaleString()}</td>
@@ -326,7 +326,7 @@ export default class Match extends Component {
                                             {this.checkNull(p.item5, '30px')}
                                         </td>
                                         <td className={'td-on-mobile'}><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
-                                        <td className={'td-on-mobile'}>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
+                                        <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
                                         <td>{p.goldEarned.toLocaleString()} G</td>
                                         <td>{p.totalMinionsKilled + p.neutralMinionsKilled} ({csPerMinute(p)})</td>
                                         <td className="tooltipped" data-position="top" data-tooltip={`Psychical: ${p.physicalDamageDealtToChampions.toLocaleString()} Magic: ${p.magicDamageDealtToChampions.toLocaleString()} True: ${p.trueDamageDealtToChampions.toLocaleString()} Taken: ${p.totalDamageTaken.toLocaleString()}`}>{p.totalDamageDealtToChampions.toLocaleString()}</td>

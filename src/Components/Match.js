@@ -3,25 +3,42 @@ import {CardPanel, Col, Row} from "react-materialize";
 import axios from "axios";
 import convert from "convert-seconds"
 import M from 'materialize-css'
-import { Link } from "react-router-dom";
 export default class Match extends Component {
     constructor(props) {
         super(props);
         this.state = {
             url: 'https://static.developer.riotgames.com/docs/lol/queues.json',
+            spells: [],
             queues: [],
             queue: {},
             runes: []
         }
     }
-    checkNull(int)
+    checkNull(int, width)
     {
         if(int !== 0)
         {
-            return <img alt={int} className={'item'} width={'40px'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/item/${int}.png`}/>
+            return <img alt={int} className={'item'} width={width} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/item/${int}.png`}/>
         }
         else {
-            return <div style={{width:'40px', marginRight:'2px', height:'40px', borderRadius:'10px', background: '#bbdefb', display:'inline-block'}}></div>
+            return <div style={{width: width, marginRight:'2px', height: width, borderRadius:'10px', background: '#bbdefb', display:'inline-block'}}></div>
+        }
+    }
+    getSummonerSpell(spellId, width)
+    {
+        let summonerSpell = this.state.spells
+        for(const [id, spell] of Object.entries(summonerSpell)){
+            console.log(spell.key)
+            console.log(spellId)
+            if(spell.key === spellId.toString())
+            {
+                 return (
+                     <div style={{height: width + 2}}>
+                         <img width={width} style={{borderRadius: '5px'}} alt={id} src={`http://ddragon.leagueoflegends.com/cdn/12.16.1/img/spell/${id}.png`}/>
+                     </div>
+                     )
+               
+            }
         }
     }
     getPrimaryRuneById(summonerRune){
@@ -58,7 +75,9 @@ export default class Match extends Component {
         const json = await response.data;
         const responseRunes = await axios.get('https://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/runesReforged.json');
         const jsonRunes = await responseRunes.data;
-        this.setState({ queues: json, runes: jsonRunes});
+        const summonerSpellsResponse = await axios.get('https://ddragon.leagueoflegends.com/cdn/12.16.1/data/en_US/summoner.json');
+        const jsonSpells = await summonerSpellsResponse.data;
+        this.setState({ queues: json, runes: jsonRunes, spells: jsonSpells.data});
         M.AutoInit();
     }
     render() {
@@ -131,7 +150,7 @@ export default class Match extends Component {
                                     {gameDuration.minutes}  {gameDuration.seconds}
                                 </div>
                                 <div>
-                                    {gameResult} 
+                                    {gameResult}
                                 </div>
                                 <div className={'blue-grey-text'}>
                                     {dateOfGame.toLocaleDateString()}
@@ -144,7 +163,15 @@ export default class Match extends Component {
                                 </div>
                             </Col>
                             <Col l={2} s={6}>
-                            <img alt={summonerStats.championName} width={'70px'} style={{borderRadius: '15px'}} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${summonerStats.championName}.png`}/>
+                                <Row style={{marginBottom:'0'}}>
+                                    <Col l={8} m={6} s={6}>
+                                        <img alt={summonerStats.championName} width={'70px'} style={{borderRadius: '15px'}} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${summonerStats.championName}.png`}/>
+                                    </Col>
+                                    <Col l={4} m={6} s={6}>
+                                            {this.getSummonerSpell(summonerStats.summoner1Id, 35)}
+                                            {this.getSummonerSpell(summonerStats.summoner2Id, 35)}
+                                    </Col>
+                                </Row>
                                 <div>
                                 {this.getPrimaryRuneById(summonerStats.perks.styles[0])}
                                 {this.getSecondaryRuneById(summonerStats.perks.styles[1].style)}
@@ -152,18 +179,18 @@ export default class Match extends Component {
                                 <div>
                                     {summonerStats.totalMinionsKilled + summonerStats.neutralMinionsKilled} CS
                                 </div>
-                                <div>
+                                <div style={{marginBottom: '10px'}}>
                                     {csPerMinute(summonerStats)} CS/min
                                 </div>
                             </Col>
                             <Col l={2} s={12}>
-                                <div style={{display:''}}>
-                                    {this.checkNull(summonerStats.item0)}
-                                    {this.checkNull(summonerStats.item1)}
-                                    {this.checkNull(summonerStats.item2)}
-                                    {this.checkNull(summonerStats.item3)}
-                                    {this.checkNull(summonerStats.item4)}
-                                    {this.checkNull(summonerStats.item5)}
+                                <div>
+                                    {this.checkNull(summonerStats.item0, '40px')}
+                                    {this.checkNull(summonerStats.item1, '40px')}
+                                    {this.checkNull(summonerStats.item2, '40px')}
+                                    {this.checkNull(summonerStats.item3, '40px')}
+                                    {this.checkNull(summonerStats.item4, '40px')}
+                                    {this.checkNull(summonerStats.item5, '40px')}
                                 </div>
                             </Col>
                             <Col l={3} s={6}>
@@ -189,6 +216,8 @@ export default class Match extends Component {
                                         </Col>
                                         <Col l={3} m={4} s={4} className={'left-align'}>
                                             <img alt={p.championName} className={'responsive-img'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/>
+                                            <img/>
+                                            <img/>
                                         </Col>
                                     </Col>
                                 ))}
@@ -205,25 +234,49 @@ export default class Match extends Component {
                                     <thead>
                                     <tr>
                                         <th>Champion</th>
+                                        <th>Items</th>
                                         <th>Summoner</th>
                                         <th>KDA</th>
-                                        <th>Total Gold</th>
-                                        <th>Minion Score</th>
+                                        <th>Gold</th>
+                                        <th className='tooltipped' data-position='top' data-tooltip='Minion Score'>CS</th>
                                         <th>Damage Given</th>
-                                        <th>Damage Taken</th>
+                                        <th className='tooltipped' data-position='top' data-tooltip='Vision Score'>VS</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {match.info.participants.filter((s) => s.teamId === summonerStats.teamId).map((p) => (
-
                                         <tr>
-                                            <td style={{paddingBottom:0}}><img alt={p.championName} className={'responsive-img championImageInTable'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/></td>
-                                            <td><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
-                                            <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
+                                            <td style={{paddingBottom: 0}}> 
+                                                <Row>
+                                                    <Col l={6} m={6} s={6}>
+                                                        <img alt={p.championName} className={'championImageInTable'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/>
+                                                    </Col>
+                                                    <Col l={6} className={'hide-on-med-and-down'}>
+                                                        {this.getSummonerSpell(p.summoner1Id, 25)}
+                                                        {this.getSummonerSpell(p.summoner2Id, 25)}
+                                                    </Col>
+                                                    <Col m={2} s={2} className={'hide-on-large-only'}>
+                                                        {this.getSummonerSpell(p.summoner1Id, 30)}
+                                                    </Col>
+                                                    <Col m={2} s={2} className={'hide-on-large-only'}>
+                                                        {this.getSummonerSpell(p.summoner2Id, 30)}
+                                                    </Col>
+                                                </Row>
+                                            </td>
+                                            <td className={'td-on-mobile'}>
+                                                {this.checkNull(p.item0, '30px')}
+                                                {this.checkNull(p.item1, '30px')}
+                                                {this.checkNull(p.item2, '30px')}
+                                                {this.checkNull(p.item3, '30px')}
+                                                {this.checkNull(p.item4, '30px')}
+                                                {this.checkNull(p.item5, '30px')}
+                                            </td>
+                                            <td className={'td-on-mobile'}><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
+                                            <td className={'td-on-mobile'}>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
                                             <td>{p.goldEarned.toLocaleString()} G</td>
                                             <td>{p.totalMinionsKilled + p.neutralMinionsKilled} ({csPerMinute(p)})</td>
-                                            <td>{p.totalDamageDealtToChampions.toLocaleString()}</td>
-                                            <td>{p.totalDamageTaken.toLocaleString()}</td>
+                                            <td className="tooltipped" data-position="top" data-tooltip={`Psychical: ${p.physicalDamageDealtToChampions.toLocaleString()} Magic: ${p.magicDamageDealtToChampions.toLocaleString()} True: ${p.trueDamageDealtToChampions.toLocaleString()} Taken: ${p.totalDamageTaken.toLocaleString()}`}>{p.totalDamageDealtToChampions.toLocaleString()}</td>
+                                            <td>{p.visionScore}</td>
                                         </tr>
                                     ))}
                                     </tbody>
@@ -233,28 +286,53 @@ export default class Match extends Component {
                             <Col l={12} m={12} s={12} className={opponentColor + ' white-text'} style={{borderRadius: '15px'}}>
                                 <table className={'responsive-table centered'}>
                                     <thead>
-                                        <tr>
-                                            <th>Champion</th>
-                                            <th>Summoner</th>
-                                            <th>KDA</th>
-                                            <th>Total Gold</th>
-                                            <th>Minion Score</th>
-                                            <th>Damage Given</th>
-                                            <th>Damage Taken</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Champion</th>
+                                        <th>Items</th>
+                                        <th>Summoner</th>
+                                        <th>KDA</th>
+                                        <th>Gold</th>
+                                        <th className='tooltipped' data-position='top' data-tooltip='Minion Score'>CS</th>
+                                        <th>Damage Given</th>
+                                        <th className='tooltipped' data-position='top' data-tooltip='Vision Score'>VS</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
                                 {match.info.participants.filter((s) => s.teamId !== summonerStats.teamId).map((p) => (
-                                        
-                                        <tr>
-                                            <td> <img alt={p.championName} className={'responsive-img championImageInTable'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/></td>
-                                            <td><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
-                                            <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
-                                            <td>  {p.goldEarned.toLocaleString()} G</td>
-                                            <td>{p.totalMinionsKilled + p.neutralMinionsKilled} ({csPerMinute(p)})</td>
-                                            <td>{p.totalDamageDealtToChampions.toLocaleString()}</td>
-                                            <td>{p.totalDamageTaken.toLocaleString()}</td>
-                                        </tr>
+                                    <tr>
+                                        <td style={{paddingBottom: 0}}>
+                                            <Row>
+                                                <Col l={6} m={6} s={6}>
+                                                    <img alt={p.championName} className={'championImageInTable'} src={`http://ddragon.leagueoflegends.com/cdn/12.14.1/img/champion/${p.championName}.png`}/>
+                                                </Col>
+                                                <Col l={6} className={'hide-on-med-and-down'}>
+                                                    {this.getSummonerSpell(p.summoner1Id, 25)}
+                                                    {this.getSummonerSpell(p.summoner2Id, 25)}
+                                                </Col>
+                                                <Col m={2} s={2} className={'hide-on-large-only'}>
+                                                    {this.getSummonerSpell(p.summoner1Id, 30)}
+                                                </Col>
+                                                <Col m={2} s={2} className={'hide-on-large-only'}>
+                                                    {this.getSummonerSpell(p.summoner2Id, 30)}
+                                                </Col>
+                                            </Row>
+                                        </td>
+                                        <td className={'td-on-mobile'}>
+                                            {this.checkNull(p.item0, '30px')}
+                                            {this.checkNull(p.item1, '30px')}
+                                            {this.checkNull(p.item2, '30px')}
+                                            {this.checkNull(p.item3, '30px')}
+                                            {this.checkNull(p.item4, '30px')}
+                                            {this.checkNull(p.item5, '30px')}
+                                        </td>
+                                        <td className={'td-on-mobile'}><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
+                                        <td className={'td-on-mobile'}>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
+                                        <td>{p.goldEarned.toLocaleString()} G</td>
+                                        <td>{p.totalMinionsKilled + p.neutralMinionsKilled} ({csPerMinute(p)})</td>
+                                        <td className="tooltipped" data-position="top" data-tooltip={`Psychical: ${p.physicalDamageDealtToChampions.toLocaleString()} Magic: ${p.magicDamageDealtToChampions.toLocaleString()} True: ${p.trueDamageDealtToChampions.toLocaleString()} Taken: ${p.totalDamageTaken.toLocaleString()}`}>{p.totalDamageDealtToChampions.toLocaleString()}</td>
+                                        <td>{p.visionScore}</td>
+
+                                    </tr>
                                 ))}
                                     </tbody>
                                 </table>

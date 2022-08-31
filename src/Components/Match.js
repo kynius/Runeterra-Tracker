@@ -264,12 +264,12 @@ export default class Match extends Component {
                                                 </Row>
                                             </td>
                                             <td className={'td-on-mobile'}>
-                                                {this.checkNull(p.item0, '30px')}
-                                                {this.checkNull(p.item1, '30px')}
-                                                {this.checkNull(p.item2, '30px')}
-                                                {this.checkNull(p.item3, '30px')}
-                                                {this.checkNull(p.item4, '30px')}
-                                                {this.checkNull(p.item5, '30px')}
+                                                {this.checkNull(p.item0, '25px')}
+                                                {this.checkNull(p.item1, '25px')}
+                                                {this.checkNull(p.item2, '25px')}
+                                                {this.checkNull(p.item3, '25px')}
+                                                {this.checkNull(p.item4, '25px')}
+                                                {this.checkNull(p.item5, '25px')}
                                             </td>
                                             <td className={'td-on-mobile'}><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
                                             <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>
@@ -318,12 +318,12 @@ export default class Match extends Component {
                                             </Row>
                                         </td>
                                         <td className={'td-on-mobile'}>
-                                            {this.checkNull(p.item0, '30px')}
-                                            {this.checkNull(p.item1, '30px')}
-                                            {this.checkNull(p.item2, '30px')}
-                                            {this.checkNull(p.item3, '30px')}
-                                            {this.checkNull(p.item4, '30px')}
-                                            {this.checkNull(p.item5, '30px')}
+                                            {this.checkNull(p.item0, '25px')}
+                                            {this.checkNull(p.item1, '25px')}
+                                            {this.checkNull(p.item2, '25px')}
+                                            {this.checkNull(p.item3, '25px')}
+                                            {this.checkNull(p.item4, '25px')}
+                                            {this.checkNull(p.item5, '25px')}
                                         </td>
                                         <td className={'td-on-mobile'}><a className={'white-text'} style={{cursor:'pointer'}} onClick={() => {window.location.href=`/eune/${p.summonerName}`}}><div title={p.summonerName} className={'truncate'}>{p.summonerName}</div></a></td>
                                         <td>{p.kills}/{p.deaths}/{p.assists} ({getKda(p)})</td>

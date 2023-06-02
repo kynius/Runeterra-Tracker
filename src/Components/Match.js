@@ -12,7 +12,8 @@ export default class Match extends Component {
             spells: [],
             queues: [],
             queue: {},
-            runes: []
+            runes: [],
+            isLoading: true
         }
     }
     checkNull(int, width)
@@ -74,7 +75,7 @@ export default class Match extends Component {
         const json = await response.data;
         const responseRunes = await axios.get(`http://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/data/en_US/runesReforged.json`);
         const jsonRunes = await responseRunes.data;
-        const summonerSpellsResponse = await axios.get(`http://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/data/en_US/summoner.json`);
+        const summonerSpellsResponse = await axios.get(`http://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/data/en_US/summoner.json`).then(this.setState({isLoading: false}));
         const jsonSpells = await summonerSpellsResponse.data;
         this.setState({ queues: json, runes: jsonRunes, spells: jsonSpells.data});
         M.AutoInit();
@@ -134,7 +135,14 @@ export default class Match extends Component {
             opponentColor = 'win'
             opponentGameResult = 'Zwycięstwo'
         }
-            
+            if(this.state.isLoading === true)
+            {
+                return (
+                    <>
+                        
+                    </>
+                )
+            }
         return (
             <>
                 <li>

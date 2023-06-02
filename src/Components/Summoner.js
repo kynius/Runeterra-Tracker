@@ -3,6 +3,7 @@ import axios from "axios";
 import {Col, Preloader, Row} from "react-materialize";
 import Match from "./Match";
 import Ranks from "./Ranks";
+import {ddragonVersion} from "../App";
 export default class Summoner extends Component{
     constructor(props) {
         super(props);
@@ -39,7 +40,7 @@ export default class Summoner extends Component{
          <>
           <Row>
              <Col l={4} m={6} s={6} className={''}>
-                 <img alt={'Summoner Icon'} height={'170px'} width={'170px'} style={{borderRadius:'15px'}} src={`https://ddragon.leagueoflegends.com/cdn/12.14.1/img/profileicon/${summoner.profileIconId}.png`}/>
+                 <img alt={'Summoner Icon'} height={'170px'} width={'170px'} style={{borderRadius:'15px'}} src={`https://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/img/profileicon/${summoner.profileIconId}.png`}/>
                  <div className={'levelborder'}>{summoner.summonerLevel}</div>
                  <div style={{fontSize:'10px'}}>Last update: {revisionDate.toLocaleString()}</div>
              </Col> 
@@ -55,7 +56,7 @@ export default class Summoner extends Component{
                  </Col> 
                  <Col l={8} m={12} s={12}>
                      <Row>
-                         <ul class="collapsible" style={{overflow: "hidden", WebkitBoxShadow: 'none', boxShadow: 'none', border:'none'}}>
+                         <ul className="collapsible" style={{overflow: "hidden", WebkitBoxShadow: 'none', boxShadow: 'none', border:'none'}}>
                          {matches.map((match) => (
                              <Match key={match.metadata.matchId} match={match} summoner={summoner}/>
                          ))}

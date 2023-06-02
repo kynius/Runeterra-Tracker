@@ -20,7 +20,6 @@ export default class Ranks extends Component{
     render() {
         function checkSimpleSerie(serie)
         {
-            console.log(serie)
            if(serie === 'W')
            {
                return <Icon className={'green-text'}>check</Icon>

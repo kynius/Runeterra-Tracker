@@ -4,7 +4,6 @@ import {Col, Row} from "react-materialize";
 
 export default function SummonerPage(){
     let {server, summonerName} = useParams();
-    let region = 1;
     return(
         <>
             <div style={{height:'100px'}}></div>

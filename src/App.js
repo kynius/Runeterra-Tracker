@@ -1,12 +1,12 @@
 import React, {useRef} from 'react';
-import {
-    useNavigate, Link
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {Col, Row} from "react-materialize";
+
+export const ddragonVersion = "13.11.1";
 
 export default function App() {
     const inputRef = useRef(null)
-    let summonerName, region = "eune";
+    let region = "eune";
     let navigate = useNavigate()
   return (
         <div>
@@ -15,12 +15,12 @@ export default function App() {
             <Row className={'center'}>
               <Col l={6} offset={"l3 m2"} m={8} s={12}>
                 <nav>
-                  <div class="nav-wrapper">
+                  <div className="nav-wrapper">
                     <form onSubmit={() => navigate(`/${region}/${inputRef.current.value}`)}>
-                      <div class="input-field blue lighten-2">
+                      <div className="input-field blue lighten-2">
                         <input id="search" type="search" ref={inputRef} required/>
-                        <label class="label-icon" for="search"   ><button type={"submit"} style={{background:'none', border:'none'}}><i class="material-icons">search</i></button></label>
-                        <i class="material-icons">close</i>
+                        <label className="label-icon" form="search"><button type={"submit"} style={{background:'none', border:'none'}}><i class="material-icons">search</i></button></label>
+                        <i className="material-icons">close</i>
                       </div>
                     </form>
                   </div>
